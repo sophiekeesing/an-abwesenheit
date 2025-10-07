@@ -1,54 +1,178 @@
-# attendanceTool
+# Anwesenheitstool (Attendance Tool)
 
-This template should help get you started developing with Vue 3 in Vite.
+Ein modernes, benutzerfreundliches Tool zur Verwaltung von Fehlzeiten und Abwesenheitsmeldungen für Schulen.
 
-## Recommended IDE Setup
+## 🚀 Features
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+### Authentifizierung
 
-## Recommended Browser Setup
+- ✅ Rollenbasierte Anmeldung (Lehrer/Schüler)
+- ✅ Benutzerregistrierung für Schüler
+- ✅ Sichere Session-Verwaltung
+- ✅ Automatische Umleitung basierend auf Benutzerrolle
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) 
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+### Datumswahl und Zeitraumauswahl
 
-## Type Support for `.vue` Imports in TS
+- ✅ Intuitive Start- und Enddatumsauswahl
+- ✅ Automatische Dauerberechnung
+- ✅ Validierung der Datumseingaben
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+### Dokumentenupload
 
-## Customize configuration
+- ✅ Drag & Drop Upload für AU-Bescheinigungen
+- ✅ Unterstützte Formate: PDF, JPG, PNG
+- ✅ Dateigröße-Validierung (max. 5MB)
+- ✅ Dateivorschau und -verwaltung
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+### Klassenauswahl
 
-## Project Setup
+- ✅ Dynamische Klassenliste für Lehrer
+- ✅ Automatische Klassenzuordnung für Schüler
+- ✅ Filterung nach Klassen
 
-```sh
-npm install
-```
+### Fehlzeitenverwaltung
 
-### Compile and Hot-Reload for Development
+- ✅ Einreichen von Abwesenheitsmeldungen
+- ✅ Bearbeitung von Fehlzeiten durch Lehrer
+- ✅ Genehmigung/Ablehnung von Anträgen
+- ✅ Kommentarfunktion für Lehrer
 
-```sh
-npm run dev
-```
+### Benutzeroberfläche
 
-### Type-Check, Compile and Minify for Production
+- ✅ Modernes, responsives Design
+- ✅ Dark Mode Unterstützung
+- ✅ Tailwind CSS für konsistentes Styling
+- ✅ Accessibility-freundlich
 
-```sh
+### Rollenspezifische Dashboards
+
+#### Lehrer-Dashboard
+
+- ✅ Übersicht aller Klassen
+- ✅ Ausstehende Genehmigungen
+- ✅ Bearbeitung von Fehlzeiten
+- ✅ Klassenweise Filterung
+
+#### Schüler-Dashboard
+
+- ✅ Persönliche Fehlzeiten-Übersicht
+- ✅ Neue Abwesenheit melden
+- ✅ Status-Tracking
+- ✅ Statistiken
+
+### Datenschutz
+
+- ✅ Umfassende Datenschutzerklärung (DSGVO-konform)
+- ✅ Deutsche Datenschutzbestimmungen
+- ✅ Transparente Datenverarbeitung
+
+## 🛠️ Technologie-Stack
+
+- **Frontend**: Vue 3 mit Composition API
+- **Styling**: Tailwind CSS
+- **UI-Komponenten**: Headless UI
+- **Icons**: Heroicons
+- **State Management**: Pinia
+- **Routing**: Vue Router
+- **Build Tool**: Vite
+- **TypeScript**: Vollständige Typisierung
+
+## 📦 Installation
+
+1. **Abhängigkeiten installieren:**
+
+   ```bash
+   npm install
+   ```
+
+2. **Entwicklungsserver starten:**
+
+   ```bash
+   npm run dev
+   ```
+
+3. **Anwendung öffnen:**
+   Öffnen Sie [http://localhost:5173](http://localhost:5173) in Ihrem Browser
+
+## 🔐 Demo-Zugangsdaten
+
+### Lehrer
+
+- **E-Mail**: mueller@school.de
+- **Passwort**: password123
+- **Berechtigung**: Alle Klassen (10A, 10B, 11C)
+
+### Schüler
+
+- **E-Mail**: max.mustermann@student.de
+- **Passwort**: password123
+- **Klasse**: 10A
+
+- **E-Mail**: anna.schmidt@student.de
+- **Passwort**: password123
+- **Klasse**: 10A
+
+## 🏗️ Build für Produktion
+
+```bash
 npm run build
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+Die fertigen Dateien finden Sie im `dist/` Ordner.
 
-```sh
+## 🧪 Tests ausführen
+
+```bash
 npm run test:unit
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+## 📝 Weitere Scripts
 
-```sh
-npm run lint
+- `npm run type-check` - TypeScript Überprüfung
+- `npm run lint` - ESLint Überprüfung
+- `npm run format` - Code-Formatierung mit Prettier
+
+## 📋 Projektstruktur
+
 ```
+src/
+├── components/          # Wiederverwendbare Komponenten
+│   ├── DatePicker.vue   # Datums-Auswahl
+│   ├── FileUpload.vue   # Datei-Upload
+│   ├── LoginForm.vue    # Anmeldeformular
+│   └── NavigationHeader.vue # Navigation
+├── stores/              # Pinia Stores
+│   ├── auth.ts          # Authentifizierung
+│   ├── attendance.ts    # Fehlzeiten-Verwaltung
+│   └── theme.ts         # Theme-Verwaltung
+├── views/               # Seiten-Komponenten
+│   ├── DashboardView.vue    # Haupt-Dashboard
+│   ├── LoginView.vue        # Anmelde-Seite
+│   ├── PrivacyView.vue      # Datenschutz
+│   ├── StudentDashboard.vue # Schüler-Dashboard
+│   └── TeacherDashboard.vue # Lehrer-Dashboard
+└── router/              # Vue Router Konfiguration
+```
+
+## 🔒 Sicherheitshinweise
+
+- In der Produktion sollten echte Authentifizierungsmechanismen implementiert werden
+- Datei-Uploads sollten serverseitig validiert und gespeichert werden
+- HTTPS sollte für alle Datenübertragungen verwendet werden
+- Regelmäßige Sicherheitsupdates der Abhängigkeiten
+
+## 📄 Lizenz
+
+Dieses Projekt ist für Bildungszwecke erstellt worden.
+
+## 🤝 Beitragen
+
+1. Fork des Repositories
+2. Feature Branch erstellen (`git checkout -b feature/AmazingFeature`)
+3. Änderungen committen (`git commit -m 'Add some AmazingFeature'`)
+4. Branch pushen (`git push origin feature/AmazingFeature`)
+5. Pull Request öffnen
+
+## 📞 Support
+
+Bei Fragen oder Problemen können Sie ein Issue im Repository erstellen.
