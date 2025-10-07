@@ -18,10 +18,10 @@
               (DSGVO) ist:
             </p>
             <p class="text-gray-700 dark:text-gray-300 mb-4">
-              [Schulname]<br />
-              [Adresse]<br />
-              [Telefon]<br />
-              [E-Mail]
+              Berufliche Schule ITECH<br />
+              Dratelnstraße 26, 21109 Hamburg<br />
+              040 4287940<br />
+              
             </p>
 
             <h2 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">
