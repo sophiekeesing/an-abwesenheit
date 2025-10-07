@@ -118,20 +118,6 @@ Ein modernes, benutzerfreundliches Tool zur Verwaltung von Fehlzeiten und Abwese
 npm run build
 ```
 
-Die fertigen Dateien finden Sie im `dist/` Ordner.
-
-## 🧪 Tests ausführen
-
-```bash
-npm run test:unit
-```
-
-## 📝 Weitere Scripts
-
-- `npm run type-check` - TypeScript Überprüfung
-- `npm run lint` - ESLint Überprüfung
-- `npm run format` - Code-Formatierung mit Prettier
-
 ## 📋 Projektstruktur
 
 ```
@@ -161,18 +147,3 @@ src/
 - HTTPS sollte für alle Datenübertragungen verwendet werden
 - Regelmäßige Sicherheitsupdates der Abhängigkeiten
 
-## 📄 Lizenz
-
-Dieses Projekt ist für Bildungszwecke erstellt worden.
-
-## 🤝 Beitragen
-
-1. Fork des Repositories
-2. Feature Branch erstellen (`git checkout -b feature/AmazingFeature`)
-3. Änderungen committen (`git commit -m 'Add some AmazingFeature'`)
-4. Branch pushen (`git push origin feature/AmazingFeature`)
-5. Pull Request öffnen
-
-## 📞 Support
-
-Bei Fragen oder Problemen können Sie ein Issue im Repository erstellen.
