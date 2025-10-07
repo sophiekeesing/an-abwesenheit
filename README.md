@@ -100,17 +100,17 @@ Ein modernes, benutzerfreundliches Tool zur Verwaltung von Fehlzeiten und Abwese
 
 - **E-Mail**: mueller@school.de
 - **Passwort**: password123
-- **Berechtigung**: Alle Klassen (10A, 10B, 11C)
+- **Berechtigung**: Alle Klassen (IT4L, IT4K, IT4O)
 
 ### Schüler
 
 - **E-Mail**: max.mustermann@student.de
 - **Passwort**: password123
-- **Klasse**: 10A
+
 
 - **E-Mail**: anna.schmidt@student.de
 - **Passwort**: password123
-- **Klasse**: 10A
+
 
 ## 🏗️ Build für Produktion
 
