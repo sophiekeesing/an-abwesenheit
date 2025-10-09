@@ -1,4 +1,4 @@
-# Anwesenheitstool (Attendance Tool)
+# FehlzeitPro (Attendance Tool)
 
 Ein modernes, benutzerfreundliches Tool zur Verwaltung von Fehlzeiten und Abwesenheitsmeldungen für Schulen.
 
@@ -107,10 +107,8 @@ Ein modernes, benutzerfreundliches Tool zur Verwaltung von Fehlzeiten und Abwese
 - **E-Mail**: max.mustermann@student.de
 - **Passwort**: password123
 
-
 - **E-Mail**: anna.schmidt@student.de
 - **Passwort**: password123
-
 
 ## 🏗️ Build für Produktion
 
@@ -146,4 +144,3 @@ src/
 - Datei-Uploads sollten serverseitig validiert und gespeichert werden
 - HTTPS sollte für alle Datenübertragungen verwendet werden
 - Regelmäßige Sicherheitsupdates der Abhängigkeiten
-

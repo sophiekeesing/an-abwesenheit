@@ -4,8 +4,13 @@
   >
     <div class="max-w-md w-full space-y-8">
       <div>
-        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white">
-          Anwesenheitstool
+        <h2
+          class="inline-flex items-center mt-6 text-center text-4xl font-extrabold text-gray-900 dark:text-white"
+        ><img
+              src="../assets/itechLogo.png"
+              class="w-[135.5px] h-[88px] mr-4"
+            />
+          FehlzeitPro
         </h2>
         <p class="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
           Melden Sie sich mit Ihren Zugangsdaten an
@@ -41,7 +46,10 @@
           </div>
         </div>
 
-        <div v-if="error" class="text-red-600 dark:text-red-400 text-sm text-center">
+        <div
+          v-if="error"
+          class="text-red-600 dark:text-red-400 text-sm text-center"
+        >
           {{ error }}
         </div>
 
@@ -77,34 +85,35 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
 
-const router = useRouter()
-const authStore = useAuthStore()
+const router = useRouter();
+const authStore = useAuthStore();
 
-const email = ref('')
-const password = ref('')
-const loading = ref(false)
-const error = ref('')
+const email = ref("");
+const password = ref("");
+const loading = ref(false);
+const error = ref("");
 
 const handleLogin = async () => {
-  loading.value = true
-  error.value = ''
+  loading.value = true;
+  error.value = "";
 
   try {
-    const success = await authStore.login(email.value, password.value)
+    const success = await authStore.login(email.value, password.value);
 
     if (success) {
-      router.push('/dashboard')
+      router.push("/dashboard");
     } else {
-      error.value = 'Ungültige Anmeldedaten. Bitte versuchen Sie es erneut.'
+      error.value = "Ungültige Anmeldedaten. Bitte versuchen Sie es erneut.";
     }
   } catch (err) {
-    error.value = 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.'
+    error.value =
+      "Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.";
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 </script>

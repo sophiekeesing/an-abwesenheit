@@ -4,17 +4,22 @@
   >
     <div class="max-w-md w-full space-y-8">
       <div>
-        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white">
+        <h2
+          class="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white"
+        >
           Registrierung
         </h2>
         <p class="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
-          Erstellen Sie Ihr Konto für das Anwesenheitstool
+          Erstellen Sie Ihr Konto für das FehlzeitPro
         </p>
       </div>
       <form class="mt-8 space-y-6" @submit.prevent="handleRegister">
         <div class="space-y-4">
           <div>
-            <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label
+              for="name"
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+            >
               Vollständiger Name
             </label>
             <input
@@ -29,7 +34,10 @@
           </div>
 
           <div>
-            <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label
+              for="email"
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+            >
               E-Mail-Adresse
             </label>
             <input
@@ -61,7 +69,10 @@
           </div>
 
           <div>
-            <label for="role" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label
+              for="role"
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+            >
               Rolle
             </label>
             <select
@@ -78,7 +89,10 @@
           </div>
 
           <div v-if="formData.role === 'student'">
-            <label for="classId" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label
+              for="classId"
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+            >
               Klasse
             </label>
             <select
@@ -96,7 +110,9 @@
           </div>
 
           <div v-if="formData.role === 'teacher'">
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+            <label
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3"
+            >
               Unterrichtete Klassen
             </label>
             <div class="space-y-2">
@@ -111,17 +127,25 @@
                   v-model="formData.teacherClasses"
                   class="rounded border-gray-300 dark:border-gray-600 text-primary-600 focus:ring-primary-500 focus:ring-offset-0"
                 />
-                <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">{{ classOption }}</span>
+                <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">{{
+                  classOption
+                }}</span>
               </label>
             </div>
           </div>
         </div>
 
-        <div v-if="error" class="text-red-600 dark:text-red-400 text-sm text-center">
+        <div
+          v-if="error"
+          class="text-red-600 dark:text-red-400 text-sm text-center"
+        >
           {{ error }}
         </div>
 
-        <div v-if="success" class="text-green-600 dark:text-green-400 text-sm text-center">
+        <div
+          v-if="success"
+          class="text-green-600 dark:text-green-400 text-sm text-center"
+        >
           {{ success }}
         </div>
 
@@ -151,57 +175,60 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
-import { useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
+import { ref, computed, watch } from "vue";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
 
-const router = useRouter()
-const authStore = useAuthStore()
+const router = useRouter();
+const authStore = useAuthStore();
 
-const availableClasses = ['IT4L', 'IT4O', 'IT4K']
+const availableClasses = ["IT4L", "IT4O", "IT4K"];
 
 const formData = ref({
-  name: '',
-  email: '',
-  dateOfBirth: '',
-  role: '' as 'student' | 'teacher' | '',
-  classId: '',
+  name: "",
+  email: "",
+  dateOfBirth: "",
+  role: "" as "student" | "teacher" | "",
+  classId: "",
   teacherClasses: [] as string[],
-})
+});
 
-const loading = ref(false)
-const error = ref('')
-const success = ref('')
+const loading = ref(false);
+const error = ref("");
+const success = ref("");
 
 const canSubmit = computed(() => {
   const baseFields =
-    formData.value.name && formData.value.email && formData.value.dateOfBirth && formData.value.role
+    formData.value.name &&
+    formData.value.email &&
+    formData.value.dateOfBirth &&
+    formData.value.role;
 
-  if (formData.value.role === 'student') {
-    return baseFields && formData.value.classId
-  } else if (formData.value.role === 'teacher') {
-    return baseFields && formData.value.teacherClasses.length > 0
+  if (formData.value.role === "student") {
+    return baseFields && formData.value.classId;
+  } else if (formData.value.role === "teacher") {
+    return baseFields && formData.value.teacherClasses.length > 0;
   }
 
-  return false
-})
+  return false;
+});
 
 // Clear class-related fields when role changes
 watch(
   () => formData.value.role,
   (newRole) => {
-    if (newRole === 'student') {
-      formData.value.teacherClasses = []
-    } else if (newRole === 'teacher') {
-      formData.value.classId = ''
+    if (newRole === "student") {
+      formData.value.teacherClasses = [];
+    } else if (newRole === "teacher") {
+      formData.value.classId = "";
     }
-  },
-)
+  }
+);
 
 const handleRegister = async () => {
-  loading.value = true
-  error.value = ''
-  success.value = ''
+  loading.value = true;
+  error.value = "";
+  success.value = "";
 
   try {
     // Prepare registration data based on role
@@ -209,25 +236,30 @@ const handleRegister = async () => {
       name: formData.value.name,
       email: formData.value.email,
       dateOfBirth: formData.value.dateOfBirth,
-      role: formData.value.role as 'student' | 'teacher',
-      classId: formData.value.role === 'student' ? formData.value.classId : undefined,
-      classes: formData.value.role === 'teacher' ? formData.value.teacherClasses : undefined,
-    }
+      role: formData.value.role as "student" | "teacher",
+      classId:
+        formData.value.role === "student" ? formData.value.classId : undefined,
+      classes:
+        formData.value.role === "teacher"
+          ? formData.value.teacherClasses
+          : undefined,
+    };
 
-    const result = await authStore.register(registrationData)
+    const result = await authStore.register(registrationData);
 
     if (result.success) {
-      success.value = result.message
+      success.value = result.message;
       setTimeout(() => {
-        router.push('/dashboard')
-      }, 1500)
+        router.push("/dashboard");
+      }, 1500);
     } else {
-      error.value = result.message
+      error.value = result.message;
     }
   } catch {
-    error.value = 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.'
+    error.value =
+      "Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.";
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 </script>
