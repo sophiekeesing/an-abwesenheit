@@ -1,0 +1,25 @@
+{
+  "name": "attendance-email-backend",
+  "version": "1.0.0",
+  "description": "Simple backend server for sending attendance system emails via Gmail SMTP",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "nodemailer": "^6.9.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1"
+  },
+  "keywords": [
+    "email",
+    "gmail",
+    "smtp",
+    "attendance",
+    "school"
+  ],
+  "author": "Berufsschule ITECH",
+  "license": "MIT"
+}

@@ -53,6 +53,52 @@
 
           <div>
             <label
+              for="password"
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+            >
+              Passwort
+            </label>
+            <input
+              id="password"
+              v-model="formData.password"
+              name="password"
+              type="password"
+              required
+              minlength="6"
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white rounded-md bg-white dark:bg-gray-700 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+              placeholder="Mindestens 6 Zeichen"
+            />
+          </div>
+
+          <div>
+            <label
+              for="confirmPassword"
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+            >
+              Passwort bestätigen
+            </label>
+            <input
+              id="confirmPassword"
+              v-model="formData.confirmPassword"
+              name="confirmPassword"
+              type="password"
+              required
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white rounded-md bg-white dark:bg-gray-700 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+              placeholder="Passwort wiederholen"
+            />
+            <p
+              v-if="
+                formData.confirmPassword &&
+                formData.password !== formData.confirmPassword
+              "
+              class="mt-1 text-sm text-red-600 dark:text-red-400"
+            >
+              Passwörter stimmen nicht überein
+            </p>
+          </div>
+
+          <div>
+            <label
               for="dateOfBirth"
               class="block text-sm font-medium text-gray-700 dark:text-gray-300"
             >
@@ -107,6 +153,42 @@
               <option value="IT4O">IT4O</option>
               <option value="IT4K">IT4K</option>
             </select>
+          </div>
+
+          <div v-if="formData.role === 'student'">
+            <label
+              for="companyName"
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+            >
+              Unternehmen / Ausbildungsbetrieb
+            </label>
+            <input
+              id="companyName"
+              v-model="formData.companyName"
+              name="companyName"
+              type="text"
+              :required="formData.role === 'student'"
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white rounded-md bg-white dark:bg-gray-700 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+              placeholder="TechCorp GmbH"
+            />
+          </div>
+
+          <div v-if="formData.role === 'student'">
+            <label
+              for="ausbilderEmail"
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+            >
+              Ausbilder E-Mail
+            </label>
+            <input
+              id="ausbilderEmail"
+              v-model="formData.ausbilderEmail"
+              name="ausbilderEmail"
+              type="email"
+              :required="formData.role === 'student'"
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white rounded-md bg-white dark:bg-gray-700 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+              placeholder="ausbilder@firma.de"
+            />
           </div>
 
           <div v-if="formData.role === 'teacher'">
@@ -187,9 +269,13 @@ const availableClasses = ["IT4L", "IT4O", "IT4K"];
 const formData = ref({
   name: "",
   email: "",
+  password: "",
+  confirmPassword: "",
   dateOfBirth: "",
   role: "" as "student" | "teacher" | "",
   classId: "",
+  companyName: "",
+  ausbilderEmail: "",
   teacherClasses: [] as string[],
 });
 
@@ -201,11 +287,20 @@ const canSubmit = computed(() => {
   const baseFields =
     formData.value.name &&
     formData.value.email &&
+    formData.value.password &&
+    formData.value.confirmPassword &&
+    formData.value.password === formData.value.confirmPassword &&
+    formData.value.password.length >= 6 &&
     formData.value.dateOfBirth &&
     formData.value.role;
 
   if (formData.value.role === "student") {
-    return baseFields && formData.value.classId;
+    return (
+      baseFields &&
+      formData.value.classId &&
+      formData.value.companyName &&
+      formData.value.ausbilderEmail
+    );
   } else if (formData.value.role === "teacher") {
     return baseFields && formData.value.teacherClasses.length > 0;
   }
@@ -221,6 +316,8 @@ watch(
       formData.value.teacherClasses = [];
     } else if (newRole === "teacher") {
       formData.value.classId = "";
+      formData.value.companyName = "";
+      formData.value.ausbilderEmail = "";
     }
   }
 );
@@ -235,10 +332,19 @@ const handleRegister = async () => {
     const registrationData = {
       name: formData.value.name,
       email: formData.value.email,
+      password: formData.value.password,
       dateOfBirth: formData.value.dateOfBirth,
       role: formData.value.role as "student" | "teacher",
       classId:
         formData.value.role === "student" ? formData.value.classId : undefined,
+      companyName:
+        formData.value.role === "student"
+          ? formData.value.companyName
+          : undefined,
+      ausbilderEmail:
+        formData.value.role === "student"
+          ? formData.value.ausbilderEmail
+          : undefined,
       classes:
         formData.value.role === "teacher"
           ? formData.value.teacherClasses

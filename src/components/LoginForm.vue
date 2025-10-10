@@ -7,7 +7,7 @@
         <h2
           class="inline-flex items-center mt-6 text-center text-4xl font-extrabold text-gray-900 dark:text-white"
         ><img
-              src="../assets/itechLogo.png"
+              src="../assets/img/itechLogo.png"
               class="w-[135.5px] h-[88px] mr-4"
             />
           FehlzeitPro

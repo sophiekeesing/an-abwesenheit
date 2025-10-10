@@ -189,6 +189,7 @@ import { useAuthStore } from "@/stores/auth";
 import { useAttendanceStore } from "@/stores/attendance";
 import DatePicker from "@/components/DatePicker.vue";
 import FileUpload from "@/components/FileUpload.vue";
+import { apiService } from "@/services/api";
 
 const authStore = useAuthStore();
 const attendanceStore = useAttendanceStore();
@@ -227,9 +228,32 @@ const canSubmit = computed(() => {
   );
 });
 
-const submitAbsence = () => {
+const submitAbsence = async () => {
   if (!authStore.user || !canSubmit.value) return;
 
+  // Calculate working days from DatePicker
+  const startDate = new Date(newAbsence.value.dates.startDate);
+  const endDate = new Date(newAbsence.value.dates.endDate);
+  let workingDays = 0;
+  const totalDays =
+    Math.ceil(
+      (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
+    ) + 1;
+
+  // Count working days (excluding weekends)
+  for (
+    let date = new Date(startDate);
+    date <= endDate;
+    date.setDate(date.getDate() + 1)
+  ) {
+    const dayOfWeek = date.getDay();
+    if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+      // Not Sunday (0) or Saturday (6)
+      workingDays++;
+    }
+  }
+
+  // Submit absence to store
   attendanceStore.submitAbsence({
     studentId: authStore.user.id,
     studentName: authStore.user.name,
@@ -241,6 +265,48 @@ const submitAbsence = () => {
       ? `uploads/${newAbsence.value.document.name}`
       : undefined,
   });
+
+  // Get student data to find ausbilder email
+  try {
+    const students = await apiService.getStudents();
+    const currentStudent = students.find(
+      (s) => s.email === authStore.user?.email
+    );
+
+    if (currentStudent && currentStudent.ausbilder_email) {
+      // Send email to ausbilder
+      const emailResult = await apiService.sendAbsenceEmail({
+        student: {
+          id: currentStudent.id || authStore.user.id,
+          first_name: currentStudent.first_name,
+          last_name: currentStudent.last_name,
+          class_name: authStore.user.classId || "",
+          company_name: currentStudent.company_name || "",
+          ausbilder_email: currentStudent.ausbilder_email,
+        },
+        absenceData: {
+          startDate: newAbsence.value.dates.startDate,
+          endDate: newAbsence.value.dates.endDate,
+          reason: newAbsence.value.reason.trim(),
+          workingDays: workingDays,
+          totalDays: totalDays,
+        },
+      });
+
+      if (emailResult.success) {
+        console.log(
+          "Absence email sent successfully to",
+          currentStudent.ausbilder_email
+        );
+      } else {
+        console.error("Failed to send absence email:", emailResult.message);
+      }
+    } else {
+      console.warn("No ausbilder email found for student");
+    }
+  } catch (error) {
+    console.error("Error sending absence email:", error);
+  }
 
   // Reset form
   newAbsence.value = {
