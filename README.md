@@ -78,12 +78,27 @@ cd ..
 
 ### **4️⃣ System starten**
 
-#### **Option A: Automatischer Start (Empfohlen)**
+#### **Option A: Ein-Klick-Start mit ./start-all.sh (Empfohlen)**
+
+Das Projekt enthält ein praktisches Startup-Script, das das gesamte System mit einem Befehl startet:
 
 ```bash
+# Berechtigung setzen (nur beim ersten Mal)
 chmod +x start-all.sh
+
+# Gesamtes System starten
 ./start-all.sh
 ```
+
+**✨ Was der Script macht:**
+
+- ✅ **Backend Email Server** (Port 3001) automatisch starten
+- ✅ **Frontend App** (Port 5173) automatisch starten
+- ✅ **SQLite Datenbank** automatisch initialisieren
+- ✅ **Klare Status-Meldungen** mit allen URLs anzeigen
+- ✅ **Graceful Shutdown** mit `Ctrl+C`
+
+**📍 Wichtig:** Das Script muss im Hauptverzeichnis des Projekts ausgeführt werden!
 
 #### **Option B: Manueller Start**
 

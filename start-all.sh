@@ -24,7 +24,7 @@ FRONTEND_PID=$!
 echo ""
 echo "✅ Both servers starting..."
 echo "📧 Backend Email Server: http://localhost:3001"
-echo "🖥️  Frontend App: http://localhost:5193"
+echo "🖥️  Frontend App: http://localhost:5173"
 echo ""
 echo "Press Ctrl+C to stop both servers"
 
