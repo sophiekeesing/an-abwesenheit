@@ -1,10 +1,12 @@
 // Simple Email Backend Server for Attendance System
 // Sends emails using Gmail SMTP - FREE solution
+// Now includes SQLite database for user management
 
 const express = require("express");
 const nodemailer = require("nodemailer");
 const cors = require("cors");
 const path = require("path");
+const { initializeDatabase, userOperations } = require("./database");
 
 const app = express();
 const PORT = 3001;
@@ -12,6 +14,15 @@ const PORT = 3001;
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Initialize database on startup
+initializeDatabase()
+  .then(() => {
+    console.log("🗄️ Database ready");
+  })
+  .catch((err) => {
+    console.error("❌ Database initialization failed:", err);
+  });
 
 // Gmail SMTP configuration
 const createTransporter = () => {
@@ -150,6 +161,156 @@ Abwesenheitsverwaltungssystem
     res.status(500).json({
       success: false,
       error: error.message || "Failed to send email",
+    });
+  }
+});
+
+// ================================
+// DATABASE ENDPOINTS
+// ================================
+
+// User registration endpoint
+app.post("/api/users/register", async (req, res) => {
+  try {
+    console.log("🔄 Registering new user:", req.body);
+
+    const userData = req.body;
+
+    // Validate required fields
+    if (
+      !userData.first_name ||
+      !userData.last_name ||
+      !userData.email ||
+      !userData.birthday ||
+      !userData.role
+    ) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Missing required fields: first_name, last_name, email, birthday, role",
+      });
+    }
+
+    // Check if user already exists
+    const existingUser = await userOperations.getUserByEmail(userData.email);
+    if (existingUser) {
+      return res.status(409).json({
+        success: false,
+        message: "User with this email already exists",
+      });
+    }
+
+    // Create new user
+    const newUser = await userOperations.createUser(userData);
+    console.log("✅ User created successfully:", newUser);
+
+    res.json({
+      success: true,
+      message: "User registered successfully",
+      user: newUser,
+    });
+  } catch (error) {
+    console.error("❌ User registration failed:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+});
+
+// Set user password (for invitation completion)
+app.post("/api/users/set-password", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Email and password are required",
+      });
+    }
+
+    const success = await userOperations.setUserPassword(email, password);
+
+    if (success) {
+      console.log("✅ Password set successfully for:", email);
+      res.json({
+        success: true,
+        message: "Password set successfully",
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+  } catch (error) {
+    console.error("❌ Password setting failed:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+});
+
+// User authentication endpoint
+app.post("/api/users/authenticate", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Email and password are required",
+      });
+    }
+
+    const user = await userOperations.authenticateUser(email, password);
+
+    if (user) {
+      // Remove password hash from response
+      const { password_hash, ...userWithoutPassword } = user;
+      console.log("✅ User authenticated successfully:", email);
+
+      res.json({
+        success: true,
+        message: "Authentication successful",
+        user: userWithoutPassword,
+      });
+    } else {
+      res.status(401).json({
+        success: false,
+        message: "Invalid credentials",
+      });
+    }
+  } catch (error) {
+    console.error("❌ Authentication failed:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+});
+
+// Get all students endpoint
+app.get("/api/students", async (req, res) => {
+  try {
+    const students = await userOperations.getAllStudents();
+    console.log(`📋 Retrieved ${students.length} students`);
+
+    res.json({
+      success: true,
+      students: students,
+    });
+  } catch (error) {
+    console.error("❌ Failed to get students:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
     });
   }
 });

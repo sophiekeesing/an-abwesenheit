@@ -22,58 +22,41 @@ class ApiService {
     try {
       console.log("Registering user to database:", userData);
 
-      // Make actual HTTP request to backend API
-      try {
-        const response = await fetch(`${this.baseUrl}/users/register`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(userData),
-        });
+      // Make HTTP request to our database backend
+      const response = await fetch(`${this.baseUrl}/users/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
+      const result = await response.json();
 
-        const result = await response.json();
-        console.log("User registered in database:", result);
-
+      if (!response.ok) {
+        console.error("Database registration failed:", result);
         return {
-          success: true,
-          message: "Benutzer erfolgreich in der Datenbank registriert",
-          user: result.user,
-        };
-      } catch (fetchError) {
-        console.warn(
-          "Database registration failed, using fallback:",
-          fetchError
-        );
-
-        // Fallback for development - generate local user
-        const newUser = {
-          ...userData,
-          id: crypto.randomUUID(),
-        };
-
-        return {
-          success: true,
-          message: "Benutzer erfolgreich registriert (lokaler Fallback)",
-          user: newUser,
+          success: false,
+          message: result.message || `HTTP error! status: ${response.status}`,
         };
       }
+
+      console.log("✅ User registered in database:", result);
+      return {
+        success: true,
+        message: result.message || "User registered successfully",
+        user: result.user,
+      };
     } catch (error) {
       console.error("Database registration error:", error);
       return {
         success: false,
-        message: "Fehler beim Speichern in der Datenbank",
+        message: "Network error - could not connect to database",
       };
     }
   }
 
-  async inviteStudent(
-    studentData: DatabaseUser
-  ): Promise<{
+  async inviteStudent(studentData: DatabaseUser): Promise<{
     success: boolean;
     message: string;
     invitationToken?: string;
@@ -583,6 +566,87 @@ FehlzeitPro System
       return {
         success: false,
         message: "Fehler beim Versenden der E-Mail",
+      };
+    }
+  }
+
+  // Set user password (for password setup completion)
+  async setUserPassword(
+    email: string,
+    password: string
+  ): Promise<{ success: boolean; message: string }> {
+    try {
+      console.log("Setting password for user:", email);
+
+      const response = await fetch(`${this.baseUrl}/users/set-password`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        console.error("Password setting failed:", result);
+        return {
+          success: false,
+          message: result.message || `HTTP error! status: ${response.status}`,
+        };
+      }
+
+      console.log("✅ Password set successfully for:", email);
+      return {
+        success: true,
+        message: result.message || "Password set successfully",
+      };
+    } catch (error) {
+      console.error("Password setting error:", error);
+      return {
+        success: false,
+        message: "Network error - could not connect to database",
+      };
+    }
+  }
+
+  // Authenticate user
+  async authenticateUser(
+    email: string,
+    password: string
+  ): Promise<{ success: boolean; user?: DatabaseUser; message: string }> {
+    try {
+      console.log("Authenticating user:", email);
+
+      const response = await fetch(`${this.baseUrl}/users/authenticate`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        console.error("Authentication failed:", result);
+        return {
+          success: false,
+          message: result.message || "Authentication failed",
+        };
+      }
+
+      console.log("✅ User authenticated successfully:", email);
+      return {
+        success: true,
+        user: result.user,
+        message: result.message || "Authentication successful",
+      };
+    } catch (error) {
+      console.error("Authentication error:", error);
+      return {
+        success: false,
+        message: "Network error - could not connect to database",
       };
     }
   }

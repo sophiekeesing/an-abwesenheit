@@ -31,7 +31,7 @@ const router = createRouter({
       path: "/setup-password",
       name: "password-setup",
       component: PasswordSetupView,
-      meta: { requiresGuest: true },
+      // Allow access even if logged in - for student account activation
     },
     {
       path: "/dashboard",

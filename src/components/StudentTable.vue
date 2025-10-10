@@ -650,6 +650,7 @@
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { apiService } from "@/services/api";
 import { emailService } from "@/services/email";
+import { useAuthStore } from "@/stores/auth";
 import AbsenceForm from "./AbsenceForm.vue";
 import CustomSelect from "./CustomSelect.vue";
 
@@ -693,6 +694,9 @@ const editForm = ref({
   ausbilder_email: "",
 });
 const saving = ref(false);
+
+// Auth store for current user information
+const authStore = useAuthStore();
 
 // Class options for the dropdown
 const classOptions = [
@@ -963,7 +967,7 @@ const handleAddStudent = async () => {
       const emailResult = await emailService.sendStudentInvitation({
         studentEmail: invitationData.email,
         studentName: invitationData.name,
-        teacherName: "Lehrkraft", // TODO: Get from current user context
+        teacherName: authStore.user?.name || "Lehrkraft",
         schoolName: "Berufsschule ITECH",
         invitationToken: result.invitationToken || "",
         invitationLink: invitationLink,

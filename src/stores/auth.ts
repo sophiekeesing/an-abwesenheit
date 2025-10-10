@@ -62,11 +62,21 @@ export const useAuthStore = defineStore("auth", () => {
         },
       ];
 
-      // Merge stored users with defaults, avoiding duplicates
+      // Merge stored users with defaults, updating roles if they exist
       const allUsers: User[] = [...defaultUsers];
       if (Array.isArray(storedUsers)) {
         storedUsers.forEach((storedUser: User) => {
-          if (!allUsers.find((u) => u.email === storedUser.email)) {
+          const existingIndex = allUsers.findIndex(
+            (u) => u.email === storedUser.email
+          );
+          if (existingIndex !== -1) {
+            // Update existing user with stored data (including role changes)
+            allUsers[existingIndex] = {
+              ...allUsers[existingIndex],
+              ...storedUser,
+            };
+          } else {
+            // Add new user
             allUsers.push(storedUser);
           }
         });
@@ -258,6 +268,15 @@ export const useAuthStore = defineStore("auth", () => {
     }
   };
 
+  const setUserPassword = (email: string, password: string) => {
+    userPasswords.value[email] = password;
+    savePasswords();
+  };
+
+  const refreshPasswords = () => {
+    userPasswords.value = getStoredPasswords();
+  };
+
   const logout = () => {
     user.value = null;
     localStorage.removeItem("attendanceUser");
@@ -285,5 +304,7 @@ export const useAuthStore = defineStore("auth", () => {
     logout,
     restoreSession,
     updateUserClass,
+    setUserPassword,
+    refreshPasswords,
   };
 });

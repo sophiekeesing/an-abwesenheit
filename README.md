@@ -1,146 +1,384 @@
-# FehlzeitPro (Attendance Tool)
+# 🎓 FehlzeitPro - Attendance Management System
 
-Ein modernes, benutzerfreundliches Tool zur Verwaltung von Fehlzeiten und Abwesenheitsmeldungen für Schulen.
+Eine moderne, vollständig funktionsfähige Anwendung zur Verwaltung von Fehlzeiten und Abwesenheitsmeldungen für Berufsschulen mit automatischem E-Mail-System und echter Datenbankpersistierung.
 
-## 🚀 Features
+## 🌟 Key Features
 
-### Authentifizierung
+### 🔐 **Sicheres Benutzermanagement**
 
-- ✅ Rollenbasierte Anmeldung (Lehrer/Schüler)
-- ✅ Benutzerregistrierung für Schüler
-- ✅ Sichere Session-Verwaltung
-- ✅ Automatische Umleitung basierend auf Benutzerrolle
+- **Rollenbasierte Authentifizierung** (Lehrer/Schüler)
+- **E-Mail-Einladungssystem** für neue Schüler
+- **Sichere Passwort-Hashing** mit bcrypt
+- **SQLite-Datenbank** für persistente Datenspeicherung
+- **Automatische Passwort-Einrichtung** über E-Mail-Links
 
-### Datumswahl und Zeitraumauswahl
+### 📧 **Automatisches E-Mail-System**
 
-- ✅ Intuitive Start- und Enddatumsauswahl
-- ✅ Automatische Dauerberechnung
-- ✅ Validierung der Datumseingaben
+- **Gmail SMTP Integration** (kostenlos - 500 E-Mails/Tag)
+- **Personalisierte Einladungsemails** mit Lehrernamen
+- **Professionelle HTML-E-Mail-Templates**
+- **Automatische Benachrichtigungen** an Ausbilder bei Fehlzeiten
 
-### Dokumentenupload
+### 🎯 **Intelligente Dashboards**
 
-- ✅ Drag & Drop Upload für AU-Bescheinigungen
-- ✅ Unterstützte Formate: PDF, JPG, PNG
-- ✅ Dateigröße-Validierung (max. 5MB)
-- ✅ Dateivorschau und -verwaltung
+#### 👨‍🏫 **Lehrer-Dashboard**
 
-### Klassenauswahl
+- **Schülerverwaltung** mit E-Mail-Einladungen
+- **Klassenweise Fehlzeiten-Übersicht**
+- **Genehmigung/Ablehnung** von Abwesenheitsanträgen
+- **Schüler hinzufügen** mit automatischer E-Mail-Einladung
+- **Echtzeitstatistiken** und Filter
 
-- ✅ Dynamische Klassenliste für Lehrer
-- ✅ Automatische Klassenzuordnung für Schüler
-- ✅ Filterung nach Klassen
+#### 🎓 **Schüler-Dashboard**
 
-### Fehlzeitenverwaltung
+- **Persönliche Fehlzeiten-Übersicht**
+- **Abwesenheitsmeldungen einreichen**
+- **Dokument-Upload** für AU-Bescheinigungen
+- **Status-Tracking** (Ausstehend/Genehmigt/Abgelehnt)
+- **Persönliche Statistiken**
 
-- ✅ Einreichen von Abwesenheitsmeldungen
-- ✅ Bearbeitung von Fehlzeiten durch Lehrer
-- ✅ Genehmigung/Ablehnung von Anträgen
-- ✅ Kommentarfunktion für Lehrer
+### 🛠️ **Moderne Technologien**
 
-### Benutzeroberfläche
+- **Vue 3** mit Composition API und TypeScript
+- **Tailwind CSS** für responsives Design
+- **SQLite-Datenbank** mit automatischer Initialisierung
+- **Express.js Backend** mit RESTful API
+- **Sichere Authentifizierung** und Session-Management
 
-- ✅ Modernes, responsives Design
-- ✅ Dark Mode Unterstützung
-- ✅ Tailwind CSS für konsistentes Styling
-- ✅ Accessibility-freundlich
+---
 
-### Rollenspezifische Dashboards
+## 🚀 Setup Instructions
 
-#### Lehrer-Dashboard
+### **Voraussetzungen**
 
-- ✅ Übersicht aller Klassen
-- ✅ Ausstehende Genehmigungen
-- ✅ Bearbeitung von Fehlzeiten
-- ✅ Klassenweise Filterung
+- Node.js (v16 oder höher)
+- npm oder yarn
+- Git
 
-#### Schüler-Dashboard
+### **1️⃣ Repository klonen**
 
-- ✅ Persönliche Fehlzeiten-Übersicht
-- ✅ Neue Abwesenheit melden
-- ✅ Status-Tracking
-- ✅ Statistiken
+```bash
+git clone https://github.com/yourusername/an-abwesenheit.git
+cd an-abwesenheit
+```
 
-### Datenschutz
+### **2️⃣ Frontend-Abhängigkeiten installieren**
 
-- ✅ Umfassende Datenschutzerklärung (DSGVO-konform)
-- ✅ Deutsche Datenschutzbestimmungen
-- ✅ Transparente Datenverarbeitung
+```bash
+npm install
+```
 
-## 🛠️ Technologie-Stack
+### **3️⃣ Backend-Abhängigkeiten installieren**
 
-- **Frontend**: Vue 3 mit Composition API
-- **Styling**: Tailwind CSS
-- **UI-Komponenten**: Headless UI
-- **Icons**: Heroicons
-- **State Management**: Pinia
-- **Routing**: Vue Router
-- **Build Tool**: Vite
-- **TypeScript**: Vollständige Typisierung
+```bash
+cd email-backend
+npm install
+cd ..
+```
 
-## 📦 Installation
+### **4️⃣ System starten**
 
-1. **Abhängigkeiten installieren:**
+#### **Option A: Automatischer Start (Empfohlen)**
 
-   ```bash
-   npm install
-   ```
+```bash
+chmod +x start-all.sh
+./start-all.sh
+```
 
-2. **Entwicklungsserver starten:**
+#### **Option B: Manueller Start**
 
-   ```bash
-   npm run dev
-   ```
+```bash
+# Terminal 1 - Backend starten
+cd email-backend
+node server.js
 
-3. **Anwendung öffnen:**
-   Öffnen Sie [http://localhost:5173](http://localhost:5173) in Ihrem Browser
+# Terminal 2 - Frontend starten
+cd ..
+npm run dev
+```
 
-## 🔐 Demo-Zugangsdaten
+### **5️⃣ Anwendung öffnen**
 
-### Lehrer
+- **Frontend**: http://localhost:5173
+- **Backend API**: http://localhost:3001
+- **Health Check**: http://localhost:3001/api/health
 
-- **E-Mail**: mueller@school.de
-- **Passwort**: password123
-- **Berechtigung**: Alle Klassen (IT4L, IT4K, IT4O)
+---
 
-### Schüler
+## � Standard-Zugangsdaten
 
-- **E-Mail**: max.mustermann@student.de
-- **Passwort**: password123
+### **👨‍🏫 Lehrer-Account**
 
-- **E-Mail**: anna.schmidt@student.de
-- **Passwort**: password123
+- **E-Mail**: `mueller@school.de`
+- **Passwort**: `password123`
+- **Berechtigung**: Alle Klassen (IT4L, IT4O, IT4K)
 
-## 🏗️ Build für Produktion
+### **🎓 Test-Schüler-Accounts**
+
+- **E-Mail**: `max.mustermann@student.de` / **Passwort**: `password123`
+- **E-Mail**: `anna.schmidt@student.de` / **Passwort**: `password123`
+
+---
+
+## � Verwendung
+
+### **Als Lehrer:**
+
+1. **Anmelden** mit Lehrer-Zugangsdaten
+2. **Schüler hinzufügen**:
+   - Klick auf "Schüler hinzufügen"
+   - E-Mail-Adresse eingeben
+   - **Automatische Einladungsmail** wird versendet
+3. **Fehlzeiten verwalten**:
+   - Ausstehende Anträge genehmigen/ablehnen
+   - Kommentare hinzufügen
+   - Klassenweise filtern
+
+### **Als Schüler:**
+
+1. **Einladungsmail** vom Lehrer erhalten
+2. **Passwort einrichten** über E-Mail-Link
+3. **Automatische Anmeldung** zum Schüler-Dashboard
+4. **Abwesenheit melden**:
+   - Zeitraum auswählen
+   - Grund eingeben
+   - Optional: AU-Bescheinigung hochladen
+5. **Status verfolgen** in der persönlichen Übersicht
+
+---
+
+## 🗄️ Datenbank
+
+### **SQLite-Datenbank**
+
+- **Automatische Erstellung** bei erstem Start
+- **Speicherort**: `email-backend/attendance.db`
+- **Sichere Passwort-Hashing** mit bcrypt
+- **Vollständige Datenintegrität**
+
+### **Tabellen-Schema**
+
+```sql
+-- Benutzer (Lehrer und Schüler)
+users (id, first_name, last_name, email, password_hash, role, status, ...)
+
+-- Klassen
+classes (id, class_name, description, teacher_id, ...)
+
+-- Fehlzeiten
+absences (id, student_id, start_date, end_date, reason, status, ...)
+```
+
+---
+
+## � E-Mail-Konfiguration
+
+### **Gmail SMTP (Kostenloses Limit: 500 E-Mails/Tag)**
+
+- **Konfiguriert**: `itech.school.attendance@gmail.com`
+- **Funktionen**:
+  - ✅ Einladungsemails für neue Schüler
+  - ✅ Passwort-Setup-Links
+  - ✅ Fehlzeiten-Benachrichtigungen an Ausbilder
+  - ✅ Personalisierte Nachrichten mit Lehrernamen
+
+### **E-Mail-Template Features**
+
+- **Responsive HTML-Design**
+- **Professionelle Formatierung**
+- **Klare Call-to-Action-Buttons**
+- **Automatische Personalisierung**
+
+---
+
+## 🏗️ Projektstruktur
+
+```
+📁 an-abwesenheit/
+├── 📁 src/                     # Vue.js Frontend
+│   ├── 📁 components/          # Wiederverwendbare Komponenten
+│   │   ├── DatePicker.vue      # Intelligente Datumsauswahl
+│   │   ├── FileUpload.vue      # Drag & Drop Upload
+│   │   ├── LoginForm.vue       # Anmeldeformular
+│   │   └── StudentTable.vue    # Schülerverwaltung
+│   ├── 📁 stores/              # Pinia State Management
+│   │   ├── auth.ts            # Authentifizierung
+│   │   ├── attendance.ts      # Fehlzeiten-Logik
+│   │   └── theme.ts           # Dark/Light Mode
+│   ├── 📁 views/              # Hauptseiten
+│   │   ├── StudentDashboard.vue
+│   │   ├── TeacherDashboard.vue
+│   │   └── PasswordSetupView.vue
+│   └── 📁 services/           # API-Services
+│       ├── api.ts             # Backend-Kommunikation
+│       └── email.ts           # E-Mail-Service
+├── 📁 email-backend/          # Express.js Backend
+│   ├── server.js              # Haupt-Server
+│   ├── database.js            # SQLite-Operations
+│   ├── attendance.db          # SQLite-Datenbank (auto-generiert)
+│   └── package.json           # Backend-Abhängigkeiten
+├── start-all.sh              # Ein-Klick-Startup-Script
+└── README.md                 # Diese Datei
+```
+
+---
+
+## 🔧 API-Endpunkte
+
+### **Benutzerverwaltung**
+
+- `POST /api/users/register` - Benutzer erstellen
+- `POST /api/users/set-password` - Passwort setzen
+- `POST /api/users/authenticate` - Anmeldung
+- `GET /api/students` - Schüler abrufen
+
+### **E-Mail-System**
+
+- `POST /api/send-invitation` - Einladungsmail senden
+- `POST /api/send-absence-email` - Fehlzeiten-Benachrichtigung
+
+### **System**
+
+- `GET /api/health` - Server-Status prüfen
+
+---
+
+## 🛡️ Sicherheitsfeatures
+
+### **Authentifizierung**
+
+- ✅ **Sichere Passwort-Hashing** mit bcrypt
+- ✅ **Token-basierte Einladungen** mit Ablaufzeit
+- ✅ **Rollenbasierte Zugriffskontrolle**
+- ✅ **Session-Management**
+
+### **Datenvalidierung**
+
+- ✅ **Input-Sanitization** auf Frontend und Backend
+- ✅ **SQL-Injection-Schutz** durch Prepared Statements
+- ✅ **CORS-Konfiguration** für sichere API-Aufrufe
+- ✅ **Dateiupload-Validierung** (Typ und Größe)
+
+---
+
+## 🎨 UI/UX Features
+
+### **Responsive Design**
+
+- ✅ **Mobile-optimiert** für alle Bildschirmgrößen
+- ✅ **Dark/Light Mode** mit automatischer Browser-Erkennung
+- ✅ **Accessibility-freundlich** (ARIA-Labels, Keyboard-Navigation)
+- ✅ **Intuitive Benutzerführung**
+
+### **Moderne Komponenten**
+
+- ✅ **Drag & Drop Datei-Upload**
+- ✅ **Intelligente Datumswahl** mit Validierung
+- ✅ **Real-time Formvalidierung**
+- ✅ **Toast-Benachrichtigungen**
+
+---
+
+## 🚦 Status-System
+
+### **Benutzer-Status**
+
+- `invited` → Eingeladen, aber noch kein Passwort gesetzt
+- `active` → Vollständig registriert und aktiv
+- `inactive` → Account deaktiviert
+
+### **Fehlzeiten-Status**
+
+- `pending` → Wartet auf Genehmigung
+- `approved` → Vom Lehrer genehmigt
+- `rejected` → Vom Lehrer abgelehnt
+
+---
+
+## 🔄 Entwicklung
+
+### **Build für Produktion**
 
 ```bash
 npm run build
 ```
 
-## 📋 Projektstruktur
+### **Tests ausführen**
 
-```
-src/
-├── components/          # Wiederverwendbare Komponenten
-│   ├── DatePicker.vue   # Datums-Auswahl
-│   ├── FileUpload.vue   # Datei-Upload
-│   ├── LoginForm.vue    # Anmeldeformular
-│   └── NavigationHeader.vue # Navigation
-├── stores/              # Pinia Stores
-│   ├── auth.ts          # Authentifizierung
-│   ├── attendance.ts    # Fehlzeiten-Verwaltung
-│   └── theme.ts         # Theme-Verwaltung
-├── views/               # Seiten-Komponenten
-│   ├── DashboardView.vue    # Haupt-Dashboard
-│   ├── LoginView.vue        # Anmelde-Seite
-│   ├── PrivacyView.vue      # Datenschutz
-│   ├── StudentDashboard.vue # Schüler-Dashboard
-│   └── TeacherDashboard.vue # Lehrer-Dashboard
-└── router/              # Vue Router Konfiguration
+```bash
+npm run test
 ```
 
-## 🔒 Sicherheitshinweise
+### **Code-Qualität prüfen**
 
-- In der Produktion sollten echte Authentifizierungsmechanismen implementiert werden
-- Datei-Uploads sollten serverseitig validiert und gespeichert werden
-- HTTPS sollte für alle Datenübertragungen verwendet werden
-- Regelmäßige Sicherheitsupdates der Abhängigkeiten
+```bash
+npm run lint
+```
+
+### **Datenbank zurücksetzen**
+
+```bash
+rm email-backend/attendance.db
+# Datenbank wird beim nächsten Start neu erstellt
+```
+
+---
+
+## 📊 Systemanforderungen
+
+### **Minimum**
+
+- Node.js 16+
+- 4GB RAM
+- 1GB freier Speicherplatz
+
+### **Empfohlen**
+
+- Node.js 18+
+- 8GB RAM
+- 5GB freier Speicherplatz
+
+---
+
+## 🤝 Beitragen
+
+1. Fork des Repositories erstellen
+2. Feature-Branch erstellen (`git checkout -b feature/AmazingFeature`)
+3. Änderungen committen (`git commit -m 'Add some AmazingFeature'`)
+4. Branch pushen (`git push origin feature/AmazingFeature`)
+5. Pull Request erstellen
+
+---
+
+## 📄 Lizenz
+
+Dieses Projekt ist unter der MIT-Lizenz lizenziert - siehe die [LICENSE](LICENSE) Datei für Details.
+
+---
+
+## 🆘 Support
+
+Bei Fragen oder Problemen:
+
+1. **Issues** auf GitHub erstellen
+2. **Dokumentation** in diesem README konsultieren
+3. **Server-Logs** in der Konsole prüfen
+4. **Health Check** aufrufen: http://localhost:3001/api/health
+
+---
+
+## 🎯 Nächste Schritte
+
+### **Geplante Features**
+
+- 📱 Mobile App (React Native)
+- 📊 Erweiterte Statistiken und Reports
+- 🔗 Integration mit Schulverwaltungssoftware
+- 📋 Bulk-Import von Schülerdaten
+- 🌍 Mehrsprachige Unterstützung
+
+---
+
+**Entwickelt mit ❤️ für moderne Berufsschulen**
+
+_Ein vollständiges Fehlzeiten-Management-System mit realer Datenbankpersistierung, automatischem E-Mail-System und professionellem Design._

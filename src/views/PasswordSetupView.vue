@@ -104,12 +104,12 @@
           <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
             Sie können sich jetzt mit Ihrem neuen Passwort anmelden.
           </p>
-          <router-link
-            to="/login"
+          <button
+            @click="loginStudent"
             class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
           >
             Jetzt anmelden
-          </router-link>
+          </button>
         </div>
 
         <!-- Password Setup Form -->
@@ -245,9 +245,13 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
+import { apiService } from "@/services/api";
 
 const route = useRoute();
+const router = useRouter();
+const authStore = useAuthStore();
 
 const loading = ref(true);
 const error = ref("");
@@ -279,32 +283,112 @@ const handlePasswordSetup = async () => {
   submitting.value = true;
 
   try {
-    // TODO: Call API to set password with token
-    // For now, simulate the API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    console.log(
+      "🔐 Setting password in database for:",
+      studentInfo.value?.email
+    );
 
-    // Update localStorage for mock authentication
-    const storedPasswords = localStorage.getItem("attendanceMockPasswords");
+    // Set password in the real database
+    const result = await apiService.setUserPassword(
+      studentInfo.value?.email || "",
+      password.value
+    );
+
+    if (!result.success) {
+      error.value = result.message || "Fehler beim Einrichten des Passworts";
+      return;
+    }
+
+    console.log("✅ Password saved to database successfully");
+
+    // Also update localStorage for immediate frontend compatibility
+    const storedPasswords = localStorage.getItem("attendancePasswords");
     const passwords = storedPasswords ? JSON.parse(storedPasswords) : {};
     passwords[studentInfo.value?.email || ""] = password.value;
-    localStorage.setItem("attendanceMockPasswords", JSON.stringify(passwords));
+    localStorage.setItem("attendancePasswords", JSON.stringify(passwords));
 
-    // Update user status to active
+    // Update auth store's password cache
+    authStore.setUserPassword(studentInfo.value?.email || "", password.value);
+    console.log("🔑 Password saved for:", studentInfo.value?.email);
+
+    // Update user in localStorage (for frontend consistency)
     const storedUsers = localStorage.getItem("attendanceMockUsers");
     const users = storedUsers ? JSON.parse(storedUsers) : [];
+
     const userIndex = users.findIndex(
       (user: { email: string }) => user.email === studentInfo.value?.email
     );
+
     if (userIndex !== -1) {
       users[userIndex].status = "active";
-      localStorage.setItem("attendanceMockUsers", JSON.stringify(users));
+      users[userIndex].role = "student";
+      users[userIndex].name = studentInfo.value?.name || users[userIndex].name;
+      console.log("📝 Updated existing user:", users[userIndex]);
+    } else {
+      const newStudent = {
+        id: (users.length + 1).toString(),
+        name: studentInfo.value?.name || "Student",
+        email: studentInfo.value?.email || "",
+        role: "student",
+        status: "active",
+        classId: "IT4L",
+        companyName: "",
+        ausbilderEmail: "",
+      };
+      users.push(newStudent);
+      console.log("👤 Created new student user:", newStudent);
     }
 
+    localStorage.setItem("attendanceMockUsers", JSON.stringify(users));
+    console.log("💾 All users in localStorage:", users);
+
     success.value = true;
-  } catch {
+  } catch (err) {
+    console.error("❌ Password setup failed:", err);
     error.value = "Ein Fehler ist beim Einrichten des Passworts aufgetreten.";
   } finally {
     submitting.value = false;
+  }
+};
+
+const loginStudent = async () => {
+  if (!studentInfo.value?.email || !password.value) {
+    router.push("/login");
+    return;
+  }
+
+  try {
+    // Refresh auth store password cache to pick up newly set password
+    authStore.refreshPasswords();
+
+    console.log("🔑 Attempting login for:", studentInfo.value.email);
+    const loginSuccess = await authStore.login(
+      studentInfo.value.email,
+      password.value
+    );
+
+    if (loginSuccess) {
+      console.log("✅ Login successful, user role:", authStore.user?.role);
+      console.log("👤 Logged in user:", authStore.user);
+
+      // Double-check the user role and redirect accordingly
+      if (authStore.user?.role === "student") {
+        console.log("🎓 Redirecting to student dashboard");
+        router.push("/student");
+      } else if (authStore.user?.role === "teacher") {
+        console.log("🏫 User is teacher, redirecting to teacher dashboard");
+        router.push("/teacher");
+      } else {
+        console.log("❓ Unknown role, redirecting to general dashboard");
+        router.push("/dashboard");
+      }
+    } else {
+      console.log("❌ Login failed, redirecting to login page");
+      router.push("/login");
+    }
+  } catch (error) {
+    console.error("Auto-login failed:", error);
+    router.push("/login");
   }
 };
 
